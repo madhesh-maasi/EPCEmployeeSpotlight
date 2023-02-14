@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "employee-spotlight-client-side-solution",
+    "id": "5adbdb68-213e-46d4-8cd4-ee9894a7a689",
+    "version": "1.0.0.1",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.14.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "EmployeeSpotlight description"
+      },
+      "longDescription": {
+        "default": "EmployeeSpotlight description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "employee-spotlight Feature",
+        "description": "The feature that activates elements of the employee-spotlight solution.",
+        "id": "f0afae85-a08b-47e2-a997-85e0e1740046",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/employee-spotlight.sppkg"
+  }
+}

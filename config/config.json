@@ -1,0 +1,23 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "employee-spotlight-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/employeeSpotlight/EmployeeSpotlightWebPart.js",
+          "manifest": "./src/webparts/employeeSpotlight/EmployeeSpotlightWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {
+    "jquery":"node_modules/jquery/dist/jquery.min.js",
+    "jqueryui":"node_modules/jqueryui/jquery-ui.min.js",
+    "sp-client-custom-fields": "node_modules/sp-client-custom-fields/dist/sp-client-custom-fields.bundle.js"
+  },
+  "localizedResources": {
+    "sp-client-custom-fields/strings": "./node_modules/sp-client-custom-fields/lib/loc/{locale}.js",
+    "EmployeeSpotlightWebPartStrings": "lib/webparts/EmployeeSpotlight/loc/{locale}.js"
+  }
+}

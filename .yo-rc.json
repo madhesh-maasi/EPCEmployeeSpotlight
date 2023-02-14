@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "employee-spotlight",
+    "libraryId": "5adbdb68-213e-46d4-8cd4-ee9894a7a689",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "EmployeeSpotlight",
+    "solutionShortDescription": "EmployeeSpotlight description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
