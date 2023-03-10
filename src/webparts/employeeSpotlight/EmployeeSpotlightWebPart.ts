@@ -181,7 +181,8 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                         var profilePicture = response["PictureUrl"] != null && response["PictureUrl"] != undefined ? (<string>response["PictureUrl"]).replace("MThumb", "LThumb") : this.defaultProfileImageUrl;
                         // var profilePicture = response["PictureUrl"] != null && response["PictureUrl"] != undefined ? (<string>response["PictureUrl"]) : this.defaultProfileImageUrl;
                         debugger;
-                        profilePicture = '/_layouts/15/userphoto.aspx?accountname=' + displayName + '&size=M&url=' + profilePicture.split("?")[0];
+                        //profilePicture = '/_layouts/15/userphoto.aspx?accountname=' + displayName + '&size=M&url=' + profilePicture.split("?")[0];
+                        profilePicture = "/_layouts/15/userphoto.aspx?size=L&username="+response["Email"];
                         userSpotlightDetails = {
                           userDisplayName: response["DisplayName"],
                           userEmail: response["Email"],
