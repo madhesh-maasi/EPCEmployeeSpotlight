@@ -58,6 +58,7 @@ export interface SpotlightDetails {
   role?: string;
   rewardTitle?: string;
   rewardDescription?: string;
+  userImage?:any;
 }
 
 
@@ -132,8 +133,11 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
         this._getSpotlightListData(this.properties.spotlightSiteURL, this.properties.spotlightListName, this.properties.spotlightEmployeeExpirationDateColumn, this.properties.spotlightEmployeeEmailColumn, this.properties.spotlightDescriptionColumn,
           this.properties.spotlightRoleColumn,
           this.properties.spotlightRewardTitleColumn,
-          this.properties.spotlightRewardDetailsColumn)
+          this.properties.spotlightRewardDetailsColumn,
+          this.properties.spotlightUserImageColumn
+          )
           .then((listDataResponse) => {
+            console.log(listDataResponse);
             var spotlightListData = listDataResponse.value;
             if (spotlightListData) {
               //debugger;
@@ -150,6 +154,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                         var role = item[this.properties.spotlightRoleColumn];
                         var rewardTitle = item[this.properties.spotlightRewardTitleColumn];
                         var rewardDescription = item[this.properties.spotlightRewardDetailsColumn];
+                        var userImageDetails=item[this.properties.spotlightUserImageColumn];
 
 
                         var userDescription = "";
@@ -180,9 +185,14 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                         //debugger;
                         var profilePicture = response["PictureUrl"] != null && response["PictureUrl"] != undefined ? (<string>response["PictureUrl"]).replace("MThumb", "LThumb") : this.defaultProfileImageUrl;
                         // var profilePicture = response["PictureUrl"] != null && response["PictureUrl"] != undefined ? (<string>response["PictureUrl"]) : this.defaultProfileImageUrl;
-                        debugger;
                         //profilePicture = '/_layouts/15/userphoto.aspx?accountname=' + displayName + '&size=M&url=' + profilePicture.split("?")[0];
                         profilePicture = "/_layouts/15/userphoto.aspx?size=L&username="+response["Email"];
+
+                        if(userImageDetails)
+                        {
+                          profilePicture=JSON.parse(userImageDetails).serverUrl+JSON.parse(userImageDetails).serverRelativeUrl
+                        }
+
                         userSpotlightDetails = {
                           userDisplayName: response["DisplayName"],
                           userEmail: response["Email"],
@@ -222,7 +232,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                   <div class="${styles.mySlides}">
                     <div style="width:100%; font-family: 'Avenir', sans-serif;">
                           <div style="float:left; display: flex;justify-content: center;margin: auto;height: 250px;padding-top: 10px;">
-                            <img style="margin-left: 25px !important;border-radius:2%; height: 200px; margin: auto;" src="${spotlightDetails[i].userProfilePic}" />
+                            <img style="margin-left: 25px !important;border-radius:2%; height: 200px; width: 200px; margin: auto;" src="${spotlightDetails[i].userProfilePic}" />
                           </div>
                           <div style="width:56%;float:left;text-align:left; padding:10px; height: 250px;">
                               <div style="margin-bottom:0; padding:10px !important; background-color: "[theme: themePrimary, default: #0078d7]"; height: 232px;">
@@ -322,7 +332,9 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
     descriptionColumn: string,
     RoleColumn: string,
     RewardTitleColumn: string,
-    RewardDetailsColumn: string): Promise<ResponceCollection> {
+    RewardDetailsColumn: string,
+    UserImageColumn:any,
+    ): Promise<ResponceCollection> {
     if (siteUrl != "" && spotlightListName != "") {
       var today: Date = new Date();
       var dd: any = today.getDate();
@@ -339,7 +351,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
       RewardTitleColumn = RewardTitleColumn.replace(" ", "_x0020_");
       RewardDetailsColumn = RewardDetailsColumn.replace(" ", "_x0020_");
 
-      return this._callAPI(siteUrl + `/_api/web/lists/GetByTitle('${spotlightListName}')/items?$select=ID,${descriptionColumn},${RoleColumn},${RewardDetailsColumn},${RewardTitleColumn},${emailColumn}/EMail&$expand=${emailColumn}/Id&$orderby=Id desc&$filter=${expiryDateColumn} ge '${dateString}'`);
+      return this._callAPI(siteUrl + `/_api/web/lists/GetByTitle('${spotlightListName}')/items?$select=ID,${descriptionColumn},${RoleColumn},${RewardDetailsColumn},${RewardTitleColumn},${emailColumn}/EMail,${UserImageColumn}&$expand=${emailColumn}/Id&$orderby=Id desc&$filter=${expiryDateColumn} ge '${dateString}'`);
     }
   }
   private _validateFiledValue(value: string): string {
@@ -476,6 +488,11 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                 }),
                 PropertyPaneDropdown('spotlightRewardDetailsColumn', {
                   label: "Reward Details",
+                  options: this.spotlightListFieldOptions,
+                  selectedKey: this._validateFiledValue.bind(this)
+                }),
+                PropertyPaneDropdown('spotlightUserImageColumn', {
+                  label: "Image Details",
                   options: this.spotlightListFieldOptions,
                   selectedKey: this._validateFiledValue.bind(this)
                 })

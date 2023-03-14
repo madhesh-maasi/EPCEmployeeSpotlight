@@ -13,4 +13,5 @@ export interface IEmployeeSpotlightWebPartProps{
     spotlightRoleColumn: string;
     spotlightRewardTitleColumn: string;
     spotlightRewardDetailsColumn: string;
+    spotlightUserImageColumn:any;
   }
