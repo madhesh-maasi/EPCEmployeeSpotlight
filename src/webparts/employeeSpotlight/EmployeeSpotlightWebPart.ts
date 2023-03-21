@@ -28,7 +28,10 @@ import * as strings from 'EmployeeSpotlightWebPartStrings';
 import { IEmployeeSpotlightWebPartProps } from './IEmployeeSpotlightWebPartProps';
 import { SliderHelper } from './Helper';
 
-
+import "owl.carousel"
+import "../../../node_modules/owl.carousel/dist/assets/owl.carousel.css";
+import "../../../node_modules/owl.carousel/dist/assets/owl.theme.default.css";
+import "../employeeSpotlight/assets/StyleSheets.css";
 
 // export interface IEmployeeSpotlightWebPartProps {
 //   description: string;
@@ -59,6 +62,7 @@ export interface SpotlightDetails {
   rewardTitle?: string;
   rewardDescription?: string;
   userImage?:any;
+  orderNumber?:any;
 }
 
 
@@ -137,7 +141,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
           this.properties.spotlightUserImageColumn
           )
           .then((listDataResponse) => {
-            console.log(listDataResponse);
+            
             var spotlightListData = listDataResponse.value;
             if (spotlightListData) {
               //debugger;
@@ -147,6 +151,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                 this._getUserImage(email)
                   .then((response) => {
                     spotlightListData.forEach((item: ResponceDetails) => {
+                      var orderNumber=item["OrderNo"]
                       let userSpotlightDetails: SpotlightDetails = { userDisplayName: "", userEmail: "", userProfilePic: "", description: "", role: "", rewardTitle: "", rewardDescription: "" };
                       if (item[this.properties.spotlightEmployeeEmailColumn]["EMail"] == response["Email"]) {
                         var userName = item[this.properties.spotlightEmployeeEmailColumn];
@@ -202,9 +207,19 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                           role: role,
                           rewardTitle: rewardTitle,
                           rewardDescription: userRewardDescription,
+                          orderNumber:orderNumber
 
                         };
                         spotlightDataCollection.push(userSpotlightDetails);
+                      }
+                    });
+                    spotlightDataCollection=spotlightDataCollection.sort((a, b) => {
+                      if (a.orderNumber < b.orderNumber) {
+                        return -1;
+                      } else if (a.orderNumber > b.orderNumber) {
+                        return 1;
+                      } else {
+                        return 0;
                       }
                     });
                     this._addSpotlightTemplateContent(spotlightDataCollection);
@@ -227,9 +242,11 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
   private _addSpotlightTemplateContent(spotlightDetails: SpotlightDetails[]): void {
     this.domElement.innerHTML = '';
     var innerContent: string = '';
+
+    console.log(spotlightDetails);
     for (let i: number = 0; i < spotlightDetails.length; i++) {
       innerContent += ` 
-                  <div class="${styles.mySlides}">
+                  <div class="item" style="marginBottom: '6px';paddingBottom: '10px';">
                     <div style="width:100%; font-family: 'Avenir', sans-serif;">
                           <div style="float:left; display: flex;justify-content: center;margin: auto;height: 250px;padding-top: 10px;">
                             <img style="margin-left: 25px !important;border-radius:2%; height: 200px; width: 200px; margin: auto;" src="${spotlightDetails[i].userProfilePic}" />
@@ -247,12 +264,41 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                       </div>
                   </div>`;
     }
+    // this.domElement.innerHTML +=
+    //   `<div class="${styles.containers}" id="slideshow" style="background-color: ${this.properties.spotlightBGColor}; cursor:pointer; width: 100%!important; padding: 5px;border-radius: 15px;box-shadow: rgba(0,0,0,0.25) 0 0 20px 0;text-align:center;color:${this.properties.spotlightFontColor};">
+    //                  ` + innerContent + `
+    //    <a  class="${styles.prev}">&#10094;</a>
+    //    <a  class="${styles.next}">&#10095;</a>
+    //  </div>`;
+
     this.domElement.innerHTML +=
-      `<div class="${styles.containers}" id="slideshow" style="background-color: ${this.properties.spotlightBGColor}; cursor:pointer; width: 100%!important; padding: 5px;border-radius: 15px;box-shadow: rgba(0,0,0,0.25) 0 0 20px 0;text-align:center;color:${this.properties.spotlightFontColor};">
+      `<div class="owl-carousel owl-theme" id="slideshow" style="background-color: ${this.properties.spotlightBGColor}; cursor:pointer; width: 100%!important; padding: 5px;border-radius: 15px;box-shadow: rgba(0,0,0,0.25) 0 0 20px 0;
+      positioon:relative;text-align:center;color:${this.properties.spotlightFontColor};">
                      ` + innerContent + `
-       <a  class="${styles.prev}">&#10094;</a>
-       <a  class="${styles.next}">&#10095;</a>
      </div>`;
+
+     jQuery(".owl-carousel").owlCarousel({
+      margin: 10,
+      items: 1,
+      loop: true,
+      autoplay: true,
+      nav: true,
+      navText: [
+        '<a  class="${styles.prev}">&#10094;</a>',
+        '<a  class="${styles.next}">&#10095;</a>',
+      ],
+      responsive: {
+        0: {
+          items: 1,
+        },
+        600: {
+          items: 1,
+        },
+        1000: {
+          items: 1,
+        },
+      },
+    });
   }
 
   private _callAPI(url: string): Promise<ResponceCollection> {
@@ -343,7 +389,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
       dd = (dd < 10) ? '0' + dd : dd;
       mm = (mm < 10) ? '0' + mm : mm;
       var dateString: string = `${yyyy}-${mm}-${dd}`;
-      debugger;
+
       emailColumn = emailColumn.replace(" ", "_x0020_");
       descriptionColumn = descriptionColumn.replace(" ", "_x0020_");
       expiryDateColumn = expiryDateColumn.replace(" ", "_x0020_");
@@ -351,7 +397,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
       RewardTitleColumn = RewardTitleColumn.replace(" ", "_x0020_");
       RewardDetailsColumn = RewardDetailsColumn.replace(" ", "_x0020_");
 
-      return this._callAPI(siteUrl + `/_api/web/lists/GetByTitle('${spotlightListName}')/items?$select=ID,${descriptionColumn},${RoleColumn},${RewardDetailsColumn},${RewardTitleColumn},${emailColumn}/EMail,${UserImageColumn}&$expand=${emailColumn}/Id&$orderby=Id desc&$filter=${expiryDateColumn} ge '${dateString}'`);
+      return this._callAPI(siteUrl + `/_api/web/lists/GetByTitle('${spotlightListName}')/items?$select=ID,OrderNo,${descriptionColumn},${RoleColumn},${RewardDetailsColumn},${RewardTitleColumn},${emailColumn}/EMail,${UserImageColumn}&$expand=${emailColumn}/Id&$orderby=Id desc&$filter=${expiryDateColumn} ge '${dateString}'`);
     }
   }
   private _validateFiledValue(value: string): string {

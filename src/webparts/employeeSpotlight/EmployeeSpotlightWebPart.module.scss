@@ -30,11 +30,11 @@
 }
 
 .mySlides {
-    display: none;
-    transition: 1s all ease-in-out;
-    -webkit-animation: slideIn 1s forwards;
-    -moz-animation: slideIn 1s forwards;
-    animation: slideIn 1s forwards;
+     display: block;
+    // transition: 1s all ease-in-out;
+    // -webkit-animation: slideIn 1s forwards;
+    // -moz-animation: slideIn 1s forwards;
+    // animation: slideIn 1s forwards;
 }
 
 
