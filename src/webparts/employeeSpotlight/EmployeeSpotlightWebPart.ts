@@ -281,7 +281,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
       margin: 10,
       items: 1,
       loop: true,
-      autoplay:true,
+      autoplay:false,
       autoplayTimeout:8000,
       nav: true,
       navText: [
