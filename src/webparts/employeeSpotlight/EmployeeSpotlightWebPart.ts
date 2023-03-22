@@ -277,11 +277,12 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                      ` + innerContent + `
      </div>`;
 
-     jQuery(".owl-carousel").owlCarousel({
+     jQuery("#slideshow").owlCarousel({
       margin: 10,
       items: 1,
       loop: true,
-      autoplay: true,
+      autoplay:true,
+      autoplayTimeout:8000,
       nav: true,
       navText: [
         '<a  class="${styles.prev}">&#10094;</a>',
