@@ -90,7 +90,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
 
     SPComponentLoader.loadScript('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js', { globalExportsName: 'jQuery' });
     // Next button functionality
-    //debugger;
+    //
     this.helper.moveSlides(1);
     jQuery(document).on("click", "." + styles.next, (event) => {
       event.preventDefault();    //prevent default action of <a>
@@ -111,7 +111,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
       }).on('mouseleave', '.' + styles.containers, () => {
         var carouselSpeed: number = this.properties.spotlightSliderSpeed * 1000;
         if (carouselSpeed && this.properties.enabledSpotlightAutoPlay) {
-          //debugger;
+          //
           // alert("Auto Play : " +this.helper.startAutoPlay + " ,, carouselSpeed : " + carouselSpeed);
           this.sliderControl = setInterval(this.helper.startAutoPlay, carouselSpeed);
         }
@@ -127,7 +127,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
   }
 
   private _renderSpotlightTemplateAsync(): void {
-    debugger;
+    
     if (Environment.type == EnvironmentType.SharePoint || Environment.type == EnvironmentType.ClassicSharePoint) {
       this._getSiteCollectionRootWeb().then((response) => {
         this.properties.spotlightSiteCollectionURL = response['Url'];
@@ -142,9 +142,10 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
           )
           .then((listDataResponse) => {
             
+
             var spotlightListData = listDataResponse.value;
             if (spotlightListData) {
-              //debugger;
+              //
               for (var key in listDataResponse.value) {
                 var email = listDataResponse.value[key][this.properties.spotlightEmployeeEmailColumn]["EMail"];
                 var id = listDataResponse.value[key]["ID"];
@@ -165,19 +166,23 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                         var userDescription = "";
                         var userRewardDescription = "";
 
-                        try {
-                          userDescription = jQuery(description).text();
-                        }
-                        catch (err) {
-                          userDescription = description;
-                        }
+                        // try {
+                          
+                        //   userDescription = jQuery(description).text();
+                        // }
+                        // catch (err) {
+                        //   userDescription = description;
+                        // }
 
-                        try {
-                          userRewardDescription = jQuery(rewardDescription).text();
-                        }
-                        catch (err) {
-                          userRewardDescription = rewardDescription;
-                        }
+                        // try {
+                        //   userRewardDescription =jQuery(rewardDescription).text();
+                          
+                        // }
+                        // catch (err) {
+                        //   userRewardDescription = rewardDescription;
+                        // }
+                        userDescription = description;
+                        userRewardDescription = rewardDescription;
 
                         // if (userDescription.length > 140) {
                         //   var displayFormUrl = this.properties.spotlightSiteURL + '/Lists/' + this.properties.spotlightListName + '/DispForm.aspx?ID=' + id;
@@ -187,7 +192,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                         var designationProperty = _.filter(response["UserProfileProperties"], { Key: "SPS-JobTitle" })[0];
                         var designation = designationProperty["Value"] ? designationProperty["Value"] : "";
                         // uses default image if user image not exist 
-                        //debugger;
+                        //
                         var profilePicture = response["PictureUrl"] != null && response["PictureUrl"] != undefined ? (<string>response["PictureUrl"]).replace("MThumb", "LThumb") : this.defaultProfileImageUrl;
                         // var profilePicture = response["PictureUrl"] != null && response["PictureUrl"] != undefined ? (<string>response["PictureUrl"]) : this.defaultProfileImageUrl;
                         //profilePicture = '/_layouts/15/userphoto.aspx?accountname=' + displayName + '&size=M&url=' + profilePicture.split("?")[0];
@@ -225,7 +230,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
                     this._addSpotlightTemplateContent(spotlightDataCollection);
                     if (this.sliderControl == null && this.properties && this.properties.enabledSpotlightAutoPlay) {
                       setTimeout(this.helper.moveSlides, 2000);
-                      debugger;
+                      
                       // alert("Auto Play : " +this.helper.startAutoPlay + ", carouselSpeed : " + this.properties.spotlightSliderSpeed * 1000);
                       // this.sliderControl = setInterval(this.helper.startAutoPlay, this.properties.spotlightSliderSpeed * 1000);
                       this.sliderControl = setInterval(this.helper.startAutoPlay, 4000);
@@ -245,6 +250,7 @@ export default class EmployeeSpotlightWebPart extends BaseClientSideWebPart<IEmp
 
     console.log(spotlightDetails);
     for (let i: number = 0; i < spotlightDetails.length; i++) {
+      console.log(JSON.stringify(spotlightDetails[i].rewardDescription));
       innerContent += ` 
                   <div class="item" style="marginBottom: '6px';paddingBottom: '10px';">
                     <div style="width:100%; font-family: 'Avenir', sans-serif;">
